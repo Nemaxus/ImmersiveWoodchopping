@@ -1,0 +1,13 @@
+{
+    "type": "code",
+    "modid": "immersivewoodchopping",
+    "name": "Immersive Wood Chopping",
+    "authors": [
+        "NemaxuswarZet"
+    ],
+    "description": "This mod adds an immersive way of getting firewood by chopping logs in world",
+    "version": "0.4.0",
+    "dependencies": {
+        "game": "1.18.8"
+    }
+}
