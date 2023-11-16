@@ -10,8 +10,14 @@ namespace ImmersiveWoodchopping
 {
     public class ImmersiveWoodchoppingModSystem : ModSystem
     {
+        ModConfig config = new ModConfig();
         public readonly Dictionary<string, CraftingRecipeIngredient> choppingRecipes = new Dictionary<string, CraftingRecipeIngredient>();
 
+        public override void StartPre(ICoreAPI api)
+        {
+            base.StartPre(api);
+            config.ReadOrGenerateConfig(api);
+        }
         public override void Start(ICoreAPI api)
         {
             api.RegisterCollectibleBehaviorClass("WoodChopping", typeof(WoodChopping));
@@ -32,6 +38,7 @@ namespace ImmersiveWoodchopping
             GenerateBasicFirewoodRecipeList(api);
             AssingDrops(api);
 
+ 
             if (api.Side == EnumAppSide.Server)
             {
 
@@ -43,14 +50,8 @@ namespace ImmersiveWoodchopping
                         item.CollectibleBehaviors = item.CollectibleBehaviors.Append(new WoodChopping(item));
                     }
                 }
-
-                
-
             }
             //Always check on which game side you add your behavior!
-            
-
-
         }
 
         public void GenerateBasicFirewoodRecipeList(ICoreAPI api)
@@ -140,13 +141,15 @@ namespace ImmersiveWoodchopping
                             { "hideInteractionHelpInSurvival", new JValue(false) },
                             { "drop", new JValue(firewoodResult.Code.ToString()) },
                             { "dropAmount", new JValue(firewoodResult.Quantity) },
-
                         };
                         behaviour.Initialize(new JsonObject(jobj));
 
-
                         block.BlockBehaviors = block.BlockBehaviors.Append(behaviour);
-                        Debug.WriteLine("Found " + block.Code);
+                        //Debug.WriteLine("Found " + block.Code);
+                        if (api.World.Config.TryGetBool("logInOffhandChopping") == true && block.StorageFlags < EnumItemStorageFlags.Offhand)
+                        {
+                            block.StorageFlags = block.StorageFlags + (int)EnumItemStorageFlags.Offhand;
+                        }
                     }
                 }
             }
