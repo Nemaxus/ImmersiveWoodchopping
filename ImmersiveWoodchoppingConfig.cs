@@ -4,7 +4,7 @@
     {
         public bool AutoLogPlacement = false;
         public bool damageToolOnChop = false;
-        public int intsaChopMinTier = 0;
+        public int intsaChopMinTier = 1;
         public ImmersiveWoodchoppingConfig()
         {
 

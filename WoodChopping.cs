@@ -2,7 +2,6 @@
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
 
 namespace ImmersiveWoodchopping
 {
@@ -22,10 +21,8 @@ namespace ImmersiveWoodchopping
                 {
                     byPlayer.Entity.StartAnimation("axechop");
                     handHandling = EnumHandHandling.PreventDefault;
-                    {
-                        byEntity.WatchedAttributes.SetBool("didchop", false);
-                        byEntity.WatchedAttributes.SetBool("haschoppedblock", false);
-                    }
+                    byEntity.WatchedAttributes.SetBool("didchop", false);
+                    byEntity.WatchedAttributes.SetBool("haschoppedblock", false);
                 }
             }
         }
@@ -48,41 +45,32 @@ namespace ImmersiveWoodchopping
                         if (secondsUsed > 0.4f && byEntity.WatchedAttributes.GetBool("didchop") == false)
                         {
                             var pitch = (byEntity as EntityPlayer).talkUtil.pitchModifier;
-                            //byPlayer.Entity.World.PlaySoundAt(new AssetLocation("sounds/block/chop"), byPlayer.Entity, byPlayer, pitch * 0.9f + (float)byEntity.World.Rand.NextDouble() * 0.2f, 16, 1f);
-
-
-                            //float curResistance = block.OnBlockBreaking(byPlayer, blockSel, byEntity.RightHandItemSlot, block.Resistance, 1, 0);
+                           
                             byPlayer.Entity.World.PlaySoundAt(new AssetLocation("sounds/block/chop"), byPlayer.Entity, byPlayer, pitch * 0.9f + (float)byEntity.World.Rand.NextDouble() * 0.2f, 16, 1f);
 
                             (byEntity.World as IClientWorldAccessor)?.AddCameraShake(0.25f);
                             byEntity.WatchedAttributes.SetBool("didchop", true);
                             byEntity.WatchedAttributes.SetBool("haschoppedblock", true);
-
+                            //Crappy way to fix animation bug T_T
+                            TryStopAnimation(byEntity, byPlayer);
                         }
                     }
+
 
                     if (byEntity.World.Side == EnumAppSide.Server)
                     {
                         if (secondsUsed > 0.45f && !byEntity.WatchedAttributes.GetBool("haschoppedblock", false))
                         {
-                            /*CraftingRecipeIngredient firewoodResult = null;
-
-                            foreach (var key in ImmersiveWoodchoppingModSystem.choppingRecipes.Keys)
-                            {
-                                if (WildcardUtil.Match(key, new AssetLocation(GetBlockPath(blockSel, byEntity)).ToString()))
-                                {
-                                    firewoodResult = ImmersiveWoodchoppingModSystem.choppingRecipes[key];
-                                }
-                            }*/
-
                             int minToolTier = byEntity.World.Config.GetInt("intsaChopMinTier");
-                            float chopChance = byEntity.RightHandItemSlot.Itemstack.Item.ToolTier / (float)(minToolTier == 0 ? 1 : minToolTier);
+
+                            Item item = byEntity.RightHandItemSlot.Itemstack.Item;
+                            float chopChance = item.ToolTier / (float)(minToolTier == 0 ? 1 : minToolTier);
                             if (byEntity.World.Rand.NextDouble() > chopChance)
                             {
                                 blockAccessor.DamageBlock(blockSel.Position, BlockFacing.FromNormal(byEntity.Pos.GetViewVector()), block.Resistance * chopChance);
                                 if (byEntity.World.Config.TryGetBool("damageToolOnChop") == true)
                                 {
-                                    byEntity.RightHandItemSlot.Itemstack.Item.DamageItem(byEntity.World, byEntity, byEntity.RightHandItemSlot);
+                                    item.DamageItem(byEntity.World, byEntity, byEntity.RightHandItemSlot);
                                 }
                             }
                             else
@@ -96,10 +84,11 @@ namespace ImmersiveWoodchopping
                                 for (int i = 0; i < blockBehavior.dropAmount; i++)
                                 {
                                     byEntity.Api.World.SpawnItemEntity(new ItemStack(drops, 1), blockSel.Position.ToVec3d());
-                                    byEntity.RightHandItemSlot.Itemstack.Item.DamageItem(byEntity.World, byEntity, byEntity.RightHandItemSlot);
                                 }
 
-                                if (byEntity.World.Config.TryGetBool("AutoLogPlacementЫ") == true)
+                                item.DamageItem(byEntity.World, byEntity, byEntity.RightHandItemSlot);
+
+                                if (byEntity.World.Config.TryGetBool("AutoLogPlacement") == true)
                                 {
                                     PlaceNextLog(byEntity, byPlayer, blockAccessor, blockSel);
                                 }
@@ -114,6 +103,14 @@ namespace ImmersiveWoodchopping
             return secondsUsed < 0.75f;
         }
 
+        private void TryStopAnimation(EntityAgent byEntity, IPlayer byPlayer)
+        {
+            if (byEntity.RightHandItemSlot.Itemstack.Item.GetRemainingDurability(byEntity.RightHandItemSlot.Itemstack) <= 1)
+            {
+                byPlayer.Entity.StopAnimation("axechop");
+            }   
+        }
+
         public override bool OnHeldInteractCancel(float secondsUsed, ItemSlot slot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel, EnumItemUseCancelReason cancelReason, ref EnumHandling handled)
         {
             IPlayer byPlayer = (byEntity as EntityPlayer).Player;
@@ -126,6 +123,7 @@ namespace ImmersiveWoodchopping
         {
             IPlayer byPlayer = (byEntity as EntityPlayer).Player;
             byPlayer.Entity.StopAnimation("axechop");
+
         }
         private void PlaceNextLog(EntityAgent byEntity, IPlayer byPlayer, IBlockAccessor blockAccessor, BlockSelection blockSel)
         {
@@ -161,17 +159,6 @@ namespace ImmersiveWoodchopping
             return block.HasBehavior<BlockBehaviorAxeChoppable>();
         }
 
-        //(IsChoppable(byEntity.World.BlockAccessor.GetBlock(blockSel.Position),byEntity))
-        //(IsPlacedLog(GetBlockPath(blockSel, byEntity)))
-
-
-        //Old method of checking for valid log
-        /* 
-        private bool IsPlacedLog(string path)
-        {
-            return path.StartsWith("log-placed") || path.StartsWith("logsection-placed");
-        }
-        */
         private void AnimationStep(float secondsUsed, EntityAgent byEntity)
         {
             float t = secondsUsed * 1f;
@@ -206,10 +193,5 @@ namespace ImmersiveWoodchopping
                 }
             };
         }
-        public string GetBlockPath(BlockSelection blockSel, EntityAgent byEntity)
-        {
-            return byEntity.World.BlockAccessor.GetBlock(blockSel.Position).Code.Path;
-        }
-
     }
 }
