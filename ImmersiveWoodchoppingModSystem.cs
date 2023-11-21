@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
@@ -22,26 +21,20 @@ namespace ImmersiveWoodchopping
         {
             api.RegisterCollectibleBehaviorClass("WoodChopping", typeof(WoodChopping));
             api.RegisterBlockBehaviorClass("AxeChoppable", typeof(BlockBehaviorAxeChoppable));
-            
         }
-
-        
 
         public override double ExecuteOrder()
         {
             return 1;
         }
 
-
         public override void AssetsFinalize(ICoreAPI api)
         {
             GenerateBasicFirewoodRecipeList(api);
             AssingDrops(api);
 
- 
             if (api.Side == EnumAppSide.Server)
             {
-
                 foreach (var item in api.World.Items)
                 {
                     if (item.Code == null) continue;
@@ -74,35 +67,40 @@ namespace ImmersiveWoodchopping
                             {
                                 foreach (var variant in ingredient.AllowedVariants)
                                 {
-                                    if (!choppingRecipes.ContainsKey(variant))
+                                    string genVariant = new AssetLocation(icode.Domain, "log-" + variant.Replace("-ud", "-*")).ToString();
+                                    if (!choppingRecipes.ContainsKey(genVariant))
                                     {
-                                        choppingRecipes.Add(new AssetLocation("log-" + variant.Replace("-ud", "-*")).ToString(), grecipe.Output);
-                                        grecipe.Enabled = false;
-                                        grecipe.ShowInCreatedBy = false;
+                                        choppingRecipes.Add(genVariant, grecipe.Output);
                                     }
                                 }
                             }
-                            else if (choppingRecipes.ContainsKey(icode.ToString().Replace("-ud", "-*")))
+                            else
                             {
-                                choppingRecipes[icode.ToString().Replace("-ud", "-*")] = grecipe.Output;
-                                grecipe.Enabled = false;
-                                grecipe.ShowInCreatedBy = false;
+                                string genIngredient = ingredient.Code.ToString().Replace("-ud", "-*");
+                                if (!grecipe.Output.Code.Domain.Equals("game") && choppingRecipes.ContainsKey(genIngredient))
+                                {
+                                    choppingRecipes[genIngredient] = grecipe.Output;
+                                }
                             }
+                            grecipe.Enabled = false;
+                            grecipe.ShowInCreatedBy = false;
                         }
                         else if (ipath.StartsWith("logsection-placed-"))
                         {
-                            if (!choppingRecipes.ContainsKey(icode.ToString()))
+                            if (!ipath.Contains('*'))
                             {
-                                choppingRecipes.Add(icode.ToString().Replace("-ne-ud", "-*-*"), grecipe.Output);
-                                grecipe.Enabled = false;
-                                grecipe.ShowInCreatedBy = false;
+                                string genVariant = new AssetLocation(icode.Domain, ipath.Replace("-ne-ud", "-*-*")).ToString();
+                                if (!choppingRecipes.ContainsKey(icode.ToString()))
+                                {
+                                    choppingRecipes.Add(genVariant, grecipe.Output);
+                                }
+                                else
+                                {
+                                    choppingRecipes[ingredient.Code.ToString().Replace("-ne-ud", "-*-*")] = grecipe.Output;
+                                }
                             }
-                            else
-                            {
-                                choppingRecipes[ingredient.Code.ToString().Replace("-ne-ud", "-*-*")] = grecipe.Output;
-                                grecipe.Enabled = false;
-                                grecipe.ShowInCreatedBy = false;
-                            }
+                            grecipe.Enabled = false;
+                            grecipe.ShowInCreatedBy = false;
                         }
                     }
                 }
@@ -146,10 +144,10 @@ namespace ImmersiveWoodchopping
 
                         block.BlockBehaviors = block.BlockBehaviors.Append(behaviour);
                         //Debug.WriteLine("Found " + block.Code);
-                        if (api.World.Config.TryGetBool("logInOffhandChopping") == true && block.StorageFlags < EnumItemStorageFlags.Offhand)
+                        /*if (api.World.Config.TryGetBool("logInOffhandChopping") == true && block.StorageFlags < EnumItemStorageFlags.Offhand)
                         {
                             block.StorageFlags = block.StorageFlags + (int)EnumItemStorageFlags.Offhand;
-                        }
+                        }*/
                     }
                 }
             }

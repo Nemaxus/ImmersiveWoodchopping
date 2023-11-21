@@ -27,9 +27,23 @@ namespace ImmersiveWoodchopping
                 config = api.LoadModConfig<ImmersiveWoodchoppingConfig>("ImmersiveWoodchoppingConfig.json");
             }
 
+            /*try
+            {
+                config = api.LoadModConfig<ImmersiveWoodchoppingConfig>("ImmersiveWoodchoppingConfig.json");
+            }
+            catch
+            {
+                config = new ImmersiveWoodchoppingConfig();
+            }
+            finally
+            {
+                api.StoreModConfig(config, "ImmersiveWoodchoppingConfig.json");
+            }*/
+
+
             api.World.Config.SetBool("AutoLogPlacement", config.AutoLogPlacement);
-            api.World.Config.SetBool("damageToolOnChop", config.damageToolOnChop);
-            api.World.Config.SetInt("intsaChopMinTier", config.intsaChopMinTier);
+            api.World.Config.SetBool("DamageToolOnChop", config.DamageToolOnChop);
+            api.World.Config.SetInt("IntsaChopMinTier", config.IntsaChopMinTier);
         }
     }
 }
