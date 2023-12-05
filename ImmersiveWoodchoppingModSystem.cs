@@ -87,7 +87,7 @@ namespace ImmersiveWoodchopping
                         }
                         else if (ipath.StartsWith("logsection-placed-"))
                         {
-                            if (!ipath.Contains('*'))
+                            //if (!ipath.Contains('*'))
                             {
                                 string genVariant = new AssetLocation(icode.Domain, ipath.Replace("-ne-ud", "-*-*")).ToString();
                                 if (!choppingRecipes.ContainsKey(icode.ToString()))
@@ -127,7 +127,6 @@ namespace ImmersiveWoodchopping
                         if (WildcardUtil.Match(new AssetLocation(key), block.Code))
                         {
                             firewoodResult = choppingRecipes[key];
-                            break;
                         }
                     }
                     //Debug.WriteLine(block.Code);

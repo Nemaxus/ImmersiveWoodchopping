@@ -1,0 +1,114 @@
+[
+{
+	file : "game:entities/humanoid/player",
+	op : "Add",
+	path : "/client/animations/-",
+	value : {
+				code: "immersiveaxechopvertical",
+				animation: "immersiveaxechopvertical", 
+				blendMode: "Add",
+				animationSpeed: 1.5,
+				holdEyePosAfterEasein: 0.3,
+				elementWeight: {
+					"UpperArmR": 25,
+					"LowerArmR": 25,
+					"UpperArmL": 25,
+					"LowerArmL": 25
+				},
+				elementBlendMode: {
+					"UpperArmR": "AddAverage",
+					"LowerArmR": "AddAverage",
+					"UpperArmL": "AddAverage",
+					"LowerArmL": "AddAverage"
+				}
+			}
+},
+
+{
+	file : "game:shapes/entity/humanoid/seraph-faceless",
+	op : "Add",
+	path : "/animations/-",
+	value : 
+	{
+			"name": "ImmersiveAxeChopVertical",
+			"code": "immersiveaxechopvertical",
+			"quantityframes": 34,
+			"onActivityStopped": "Rewind",
+			"onAnimationEnd": "Repeat",
+			"keyframes": [
+				{
+					"frame": 0,
+					"elements": {
+						"LowerArmR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"UpperArmR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"UpperArmL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"LowerArmL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"LowerTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"UpperFootL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"UpperFootR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"FrontShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"BackShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"UpperTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"ItemAnchor": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 }
+					}
+				},
+				{
+					"frame": 8,
+					"elements": {
+						"UpperArmL": { "rotationX": 10.0, "rotationY": -6.0, "rotationZ": -75.0 },
+						"UpperArmR": { "rotationX": -10.0, "rotationY": 6.0, "rotationZ": -75.0 },
+						"LowerArmR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"LowerArmL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"BackShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"FrontShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"UpperFootR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"UpperFootL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"LowerTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"UpperTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 5.0 },
+						"ItemAnchor": { "rotationX": 14.0, "rotationY": 0.0, "rotationZ": 0.0 }
+					}
+				},
+				{
+					"frame": 13,
+					"elements": {
+						"UpperArmR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -122.0 },
+						"UpperArmL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -122.0 }
+					}
+				},
+				{
+					"frame": 16,
+					"elements": {
+						"UpperArmR": { "rotationX": -8.0, "rotationY": 0.0, "rotationZ": -150.0 },
+						"UpperArmL": { "rotationX": 8.0, "rotationY": 0.0, "rotationZ": -150.0 },
+						"LowerArmL": { "rotationX": -10.0, "rotationY": -14.0, "rotationZ": -60.0 },
+						"LowerArmR": { "rotationX": 5.0, "rotationY": 13.0, "rotationZ": -60.0 },
+						"UpperTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -10.0 },
+						"LowerTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"UpperFootL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"UpperFootR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"FrontShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"BackShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"LowerButtons": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"ItemAnchor": { "rotationX": 13.0, "rotationY": 0.0, "rotationZ": 0.0 }
+					}
+				},
+				{
+					"frame": 22,
+					"elements": {
+						"LowerArmL": { "rotationX": 25.0, "rotationY": 0.0, "rotationZ": -10.0 },
+						"LowerArmR": { "rotationX": -25.0, "rotationY": 0.0, "rotationZ": -10.0 },
+						"UpperArmR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -40.0 },
+						"UpperArmL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -40.0 },
+						"UpperTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 20.0 },
+						"LowerTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 20.0 },
+						"UpperFootL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -20.0 },
+						"UpperFootR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -20.0 },
+						"FrontShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -20.0 },
+						"BackShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -10.0 },
+						"LowerButtons": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
+						"ItemAnchor": { "rotationX": 25.0, "rotationY": 0.0, "rotationZ": 0.0 }
+					}
+				}
+			]
+		}
+}]
