@@ -41,9 +41,10 @@ namespace ImmersiveWoodchopping
             }*/
 
 
-            api.World.Config.SetBool("AutoLogPlacement", config.AutoLogPlacement);
-            api.World.Config.SetBool("DamageToolOnChop", config.DamageToolOnChop);
-            api.World.Config.SetInt("IntsaChopMinTier", config.IntsaChopMinTier);
+            api.World.Config.SetBool(Constants.ModId + ":AutoLogPlacement", config.AutoLogPlacement);
+            api.World.Config.SetBool(Constants.ModId + ":DamageToolOnChop", config.DamageToolOnChop);
+            api.World.Config.SetInt(Constants.ModId + ":IntsaChopMinTier", config.IntsaChopMinTier);
+            api.World.Config.SetBool(Constants.ModId + ":DisableGridRecipe", config.DisableGridRecipe);
         }
     }
 }

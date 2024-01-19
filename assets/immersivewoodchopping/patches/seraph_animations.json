@@ -65,14 +65,23 @@
 						"UpperFootL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"LowerTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"UpperTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 5.0 },
-						"ItemAnchor": { "rotationX": 14.0, "rotationY": 0.0, "rotationZ": 0.0 }
+						"ItemAnchor": { "offsetX": -8.0, "offsetY": 0.0, "offsetZ": 0.0, "rotationX": 14.0, "rotationY": 0.0, "rotationZ": 0.0 }
+					}
+				},
+				{
+					"frame": 10,
+					"elements": {
+						"UpperArmL": { "rotationX": 7.0, "rotationY": -5.0, "rotationZ": -94.0 },
+						"UpperArmR": { "rotationX": -4.0, "rotationY": 6.0, "rotationZ": -94.0 },
+						"ItemAnchor": { "offsetX": -8.0, "offsetY": 0.0, "offsetZ": 0.0}
 					}
 				},
 				{
 					"frame": 13,
 					"elements": {
 						"UpperArmR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -122.0 },
-						"UpperArmL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -122.0 }
+						"UpperArmL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -122.0 },
+						"ItemAnchor": { "offsetX": -8.0, "offsetY": 0.0, "offsetZ": 0.0}
 					}
 				},
 				{
@@ -89,7 +98,7 @@
 						"FrontShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"BackShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"LowerButtons": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
-						"ItemAnchor": { "rotationX": 13.0, "rotationY": 0.0, "rotationZ": 0.0 }
+						"ItemAnchor": { "offsetX": -8.0, "offsetY": 0.0, "offsetZ": 0.0, "rotationX": 13.0, "rotationY": 0.0, "rotationZ": 0.0 }
 					}
 				},
 				{
@@ -106,7 +115,7 @@
 						"FrontShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -20.0 },
 						"BackShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -10.0 },
 						"LowerButtons": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
-						"ItemAnchor": { "rotationX": 25.0, "rotationY": 0.0, "rotationZ": 0.0 }
+						"ItemAnchor": { "offsetX": -8.0, "offsetY": 0.0, "offsetZ": 0.0, "rotationX": 25.0, "rotationY": 0.0, "rotationZ": 0.0 }
 					}
 				}
 			]

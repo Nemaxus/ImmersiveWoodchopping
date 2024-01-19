@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
@@ -38,9 +39,11 @@ namespace ImmersiveWoodchopping
                 foreach (var item in api.World.Items)
                 {
                     if (item.Code == null) continue;
-                    if (item.Code.Path.StartsWith("axe-") && !WildcardUtil.Match("*-ruined", item.Code.Path))
+                    if (item.Tool == EnumTool.Axe && !WildcardUtil.Match("*-ruined", item.Code.Path))
+                    //if (item.Code.Path.StartsWith("axe-") && !WildcardUtil.Match("*-ruined", item.Code.Path))
                     {
                         item.CollectibleBehaviors = item.CollectibleBehaviors.Append(new WoodChopping(item));
+                        //Debug.WriteLine("Behavior added to: " + item.Code);
                     }
                 }
             }
@@ -55,6 +58,7 @@ namespace ImmersiveWoodchopping
                 {
                     AssetLocation icode;
                     string ipath;
+                    bool disabled = !api.World.Config.GetBool(Constants.ModId + ":DisableGridRecipe", true);
 
                     foreach (CraftingRecipeIngredient ingredient in grecipe.resolvedIngredients)
                     {
@@ -82,8 +86,8 @@ namespace ImmersiveWoodchopping
                                     choppingRecipes[genIngredient] = grecipe.Output;
                                 }
                             }
-                            grecipe.Enabled = false;
-                            grecipe.ShowInCreatedBy = false;
+                            grecipe.Enabled = disabled;
+                            grecipe.ShowInCreatedBy = disabled;
                         }
                         else if (ipath.StartsWith("logsection-placed-"))
                         {
@@ -99,8 +103,8 @@ namespace ImmersiveWoodchopping
                                     choppingRecipes[ingredient.Code.ToString().Replace("-ne-ud", "-*-*")] = grecipe.Output;
                                 }
                             }
-                            grecipe.Enabled = false;
-                            grecipe.ShowInCreatedBy = false;
+                            grecipe.Enabled = disabled;
+                            grecipe.ShowInCreatedBy = disabled;
                         }
                     }
                 }

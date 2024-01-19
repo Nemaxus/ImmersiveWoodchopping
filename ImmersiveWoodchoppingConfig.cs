@@ -5,6 +5,7 @@
         public bool AutoLogPlacement = false;
         public bool DamageToolOnChop = false;
         public int IntsaChopMinTier = 1;
+        public bool DisableGridRecipe = true;
         public ImmersiveWoodchoppingConfig()
         {
 
@@ -15,6 +16,7 @@
             AutoLogPlacement = previousConfig.AutoLogPlacement;
             DamageToolOnChop = previousConfig.DamageToolOnChop;
             IntsaChopMinTier = previousConfig.IntsaChopMinTier;
+            DisableGridRecipe = previousConfig.DisableGridRecipe;
         }
     }
 }
