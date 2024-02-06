@@ -1,10 +1,7 @@
-﻿using System;
-using System.Reflection.Metadata;
-using Vintagestory.API.Client;
+﻿using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
-using Vintagestory.API.Server;
-using Vintagestory.GameContent;
+
 
 namespace ImmersiveWoodchopping
 {
@@ -33,7 +30,6 @@ namespace ImmersiveWoodchopping
 
         public override bool OnHeldInteractStep(float secondsUsed, ItemSlot slot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel, ref EnumHandling handling)
         {
-            handling = EnumHandling.PreventDefault;
             IPlayer byPlayer = (byEntity as EntityPlayer).Player;
             IWorldAccessor world = byEntity.World;
             IBlockAccessor blockAccessor = world.BlockAccessor;
@@ -44,6 +40,7 @@ namespace ImmersiveWoodchopping
                 Block block = blockAccessor.GetBlock(blockSel.Position);
                 if (IsChoppable(block))
                 {
+                    handling = EnumHandling.PreventDefault;
                     if (world.Side == EnumAppSide.Client)
                     {
                         //AnimationStep(secondsUsed, byEntity);
@@ -92,7 +89,7 @@ namespace ImmersiveWoodchopping
 
                                 for (int i = 0; i < blockBehavior.dropAmount; i++)
                                 {
-                                    //world.SpawnItemEntity(new ItemStack(drops, 1), blockSel.Position.ToVec3d());
+                                    world.SpawnItemEntity(new ItemStack(drops, 1), blockSel.Position.ToVec3d());
                                 }
                                 item.DamageItem(world, byEntity, byEntity.RightHandItemSlot);
 
@@ -153,10 +150,10 @@ namespace ImmersiveWoodchopping
             {
                 blockAccessor.SetBlock(foungLog.Id, blockSel.Position);
                 byEntity.World.PlaySoundAt(foungLog.Sounds.Place, byPlayer);
-                if(byPlayer.WorldData.CurrentGameMode != EnumGameMode.Creative)
+                if (byPlayer.WorldData.CurrentGameMode != EnumGameMode.Creative)
                 {
-                logInSlot.TakeOut(1);
-                logInSlot.MarkDirty();
+                    logInSlot.TakeOut(1);
+                    logInSlot.MarkDirty();
                 }
             }
         }
@@ -165,37 +162,37 @@ namespace ImmersiveWoodchopping
         {
             return block.HasBehavior<BlockBehaviorAxeChoppable>();
         }
-/*
-        private void AnimationStepFreeMouse(EntityAgent byEntity)
-        {
-            var mouseY = (byEntity.Api as ICoreClientAPI).Input.MouseY;
-            var tf = new ModelTransform();
-            tf.EnsureDefaultValues();
-            tf.Translation.Set(0, mouseY/500, 0);
-            byEntity.Controls.UsingHeldItemTransformAfter = tf;
-        }
-        private void AnimationStep(float secondsUsed, EntityAgent byEntity)
-        {
-            float t = secondsUsed * 1f;
-            float backwards = -Math.Min(0.35f, 2 * t);
-            float stab = Math.Min(1.2f, 20 * Math.Max(0, t - 0.35f));
+        /*
+                private void AnimationStepFreeMouse(EntityAgent byEntity)
+                {
+                    var mouseY = (byEntity.Api as ICoreClientAPI).Input.MouseY;
+                    var tf = new ModelTransform();
+                    tf.EnsureDefaultValues();
+                    tf.Translation.Set(0, mouseY/500, 0);
+                    byEntity.Controls.UsingHeldItemTransformAfter = tf;
+                }
+                private void AnimationStep(float secondsUsed, EntityAgent byEntity)
+                {
+                    float t = secondsUsed * 1f;
+                    float backwards = -Math.Min(0.35f, 2 * t);
+                    float stab = Math.Min(1.2f, 20 * Math.Max(0, t - 0.35f));
 
 
-            var tf = new ModelTransform();
-            tf.EnsureDefaultValues();
+                    var tf = new ModelTransform();
+                    tf.EnsureDefaultValues();
 
-            float sum = stab + backwards;
-            float easeout = Math.Max(0, 2 * (t - 1));
+                    float sum = stab + backwards;
+                    float easeout = Math.Max(0, 2 * (t - 1));
 
-            if (t > 0.4f) sum = Math.Max(0, sum - easeout);
+                    if (t > 0.4f) sum = Math.Max(0, sum - easeout);
 
-            tf.Translation.Set(-1.4f * sum, sum, -sum * 0.8f * 2.6f);
-            tf.Rotation.Set(-sum * 45, 0, sum * 10);
+                    tf.Translation.Set(-1.4f * sum, sum, -sum * 0.8f * 2.6f);
+                    tf.Rotation.Set(-sum * 45, 0, sum * 10);
 
-            byEntity.Controls.UsingHeldItemTransformAfter = tf;
+                    byEntity.Controls.UsingHeldItemTransformAfter = tf;
 
-        }
-*/
+                }
+        */
 
         public override WorldInteraction[] GetHeldInteractionHelp(ItemSlot inSlot, ref EnumHandling handling)
         {

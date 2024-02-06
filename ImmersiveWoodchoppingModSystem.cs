@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
 using Vintagestory.API.Common;
@@ -11,7 +12,8 @@ namespace ImmersiveWoodchopping
     public class ImmersiveWoodchoppingModSystem : ModSystem
     {
         ModConfig config = new ModConfig();
-        public readonly Dictionary<string, CraftingRecipeIngredient> choppingRecipes = new Dictionary<string, CraftingRecipeIngredient>();
+        public readonly Dictionary<string, CraftingRecipeIngredient> choppingRecipes = new();
+        public readonly List<string> choppingMaterials = new();
 
         public override void StartPre(ICoreAPI api)
         {
@@ -31,7 +33,7 @@ namespace ImmersiveWoodchopping
 
         public override void AssetsFinalize(ICoreAPI api)
         {
-            GenerateBasicFirewoodRecipeList(api);
+            GenerateFirewoodRecipeList(api);
             AssingDrops(api);
 
             if (api.Side == EnumAppSide.Server)
@@ -50,64 +52,70 @@ namespace ImmersiveWoodchopping
             //Always check on which game side you add your behavior!
         }
 
-        public void GenerateBasicFirewoodRecipeList(ICoreAPI api)
+        public void GenerateFirewoodRecipeList(ICoreAPI api)
         {
             foreach (var grecipe in api.World.GridRecipes)
             {
-                if (grecipe.Output.Code.Path.StartsWith("firewood"))
+                if (!grecipe.Output.Code.Path.StartsWith("firewood")) continue;
+                if (grecipe.resolvedIngredients.Length != 2) continue;
+
+                bool flag = false;
+                if (grecipe.Width == 1 && grecipe.Height == 2)
                 {
-                    AssetLocation icode;
-                    string ipath;
-                    bool disabled = !api.World.Config.GetBool(Constants.ModId + ":DisableGridRecipe", true);
+                    flag = true;
+                }
+                else if (grecipe.Width == 2 && grecipe.Height == 1)
+                {
+                    flag = true;
+                }
+                if (!flag) continue;
 
-                    foreach (CraftingRecipeIngredient ingredient in grecipe.resolvedIngredients)
+                AssetLocation icode;
+                string ipath;
+                string icodefirstpart;
+                bool enabled = !api.World.Config.GetBool(Constants.ModId + ":DisableGridRecipe", true);
+
+                foreach (CraftingRecipeIngredient ingredient in grecipe.resolvedIngredients)
+                {
+                    icode = ingredient.Code;
+                    ipath = icode.Path;
+                    if (ingredient.Type != EnumItemClass.Block) continue;
+
+                    icodefirstpart = icode.FirstCodePart();
+
+                    string genVariant;
+
+                    if (ingredient.AllowedVariants != null)
                     {
-                        icode = ingredient.Code;
-                        ipath = icode.Path;
-
-                        if (ipath.StartsWith("log-"))
+                        foreach (var variant in ingredient.AllowedVariants)
                         {
-                            if (ingredient.AllowedVariants != null)
+                            genVariant = new AssetLocation(icode.Domain, icodefirstpart + "-" + variant.Replace("-ne-ud", "-*-*").Replace("-ud", "-*")).ToString();
+                            if (!choppingRecipes.ContainsKey(genVariant))
                             {
-                                foreach (var variant in ingredient.AllowedVariants)
-                                {
-                                    string genVariant = new AssetLocation(icode.Domain, "log-" + variant.Replace("-ud", "-*")).ToString();
-                                    if (!choppingRecipes.ContainsKey(genVariant))
-                                    {
-                                        choppingRecipes.Add(genVariant, grecipe.Output);
-                                    }
-                                }
+                                choppingRecipes.Add(genVariant, grecipe.Output);
                             }
-                            else
-                            {
-                                string genIngredient = ingredient.Code.ToString().Replace("-ud", "-*");
-                                if (!grecipe.Output.Code.Domain.Equals("game") && choppingRecipes.ContainsKey(genIngredient))
-                                {
-                                    choppingRecipes[genIngredient] = grecipe.Output;
-                                }
-                            }
-                            grecipe.Enabled = disabled;
-                            grecipe.ShowInCreatedBy = disabled;
-                        }
-                        else if (ipath.StartsWith("logsection-placed-"))
-                        {
-                            //if (!ipath.Contains('*'))
-                            {
-                                string genVariant = new AssetLocation(icode.Domain, ipath.Replace("-ne-ud", "-*-*")).ToString();
-                                if (!choppingRecipes.ContainsKey(icode.ToString()))
-                                {
-                                    choppingRecipes.Add(genVariant, grecipe.Output);
-                                }
-                                else
-                                {
-                                    choppingRecipes[ingredient.Code.ToString().Replace("-ne-ud", "-*-*")] = grecipe.Output;
-                                }
-                            }
-                            grecipe.Enabled = disabled;
-                            grecipe.ShowInCreatedBy = disabled;
                         }
                     }
+                    else
+                    {
+                        genVariant = icode.ToString().Replace("-ne-ud", "-*-*").Replace("-ud", "-*");
+                        if (!grecipe.Output.Code.Domain.Equals("game") && choppingRecipes.ContainsKey(genVariant))
+                        {
+                            choppingRecipes[genVariant] = grecipe.Output;
+                        }
+                        else
+                        {
+                            choppingRecipes.Add(genVariant, grecipe.Output);
+                        }
+                    }
+                    if (!choppingMaterials.Contains(icodefirstpart))
+                    {
+                        choppingMaterials.Add(icodefirstpart);
+                    }
+                    grecipe.Enabled = enabled;
+                    grecipe.ShowInCreatedBy = enabled;
                 }
+
             }
         }
 
@@ -121,37 +129,35 @@ namespace ImmersiveWoodchopping
             foreach (var block in api.World.Blocks)
             {
                 if (block.Code == null) continue;
-                if (block.Code.Path.StartsWith("log-placed") ||
-                    block.Code.Path.StartsWith("logsection-placed"))
-                {
-                    CraftingRecipeIngredient firewoodResult = null;
+                if (!choppingMaterials.Contains(block.Code.FirstCodePart())) continue;
 
-                    foreach (var key in choppingRecipes.Keys)
+                CraftingRecipeIngredient firewoodResult = null;
+
+                foreach (var key in choppingRecipes.Keys)
+                {
+                    if (WildcardUtil.Match(new AssetLocation(key), block.Code))
                     {
-                        if (WildcardUtil.Match(new AssetLocation(key), block.Code))
-                        {
-                            firewoodResult = choppingRecipes[key];
-                        }
+                        firewoodResult = choppingRecipes[key];
                     }
-                    //Debug.WriteLine(block.Code);
-                    if (firewoodResult != null)
-                    {
-                        BlockBehaviorAxeChoppable behaviour = new BlockBehaviorAxeChoppable(block);
-                        JObject jobj = new JObject
+                }
+                //Debug.WriteLine(block.Code);
+                if (firewoodResult != null)
+                {
+                    BlockBehaviorAxeChoppable behaviour = new BlockBehaviorAxeChoppable(block);
+                    JObject jobj = new JObject
                         {
                             { "hideInteractionHelpInSurvival", new JValue(false) },
                             { "drop", new JValue(firewoodResult.Code.ToString()) },
                             { "dropAmount", new JValue(firewoodResult.Quantity) },
                         };
-                        behaviour.Initialize(new JsonObject(jobj));
+                    behaviour.Initialize(new JsonObject(jobj));
 
-                        block.BlockBehaviors = block.BlockBehaviors.Append(behaviour);
-                        //Debug.WriteLine("Found " + block.Code);
-                        /*if (api.World.Config.TryGetBool("logInOffhandChopping") == true && block.StorageFlags < EnumItemStorageFlags.Offhand)
-                        {
-                            block.StorageFlags = block.StorageFlags + (int)EnumItemStorageFlags.Offhand;
-                        }*/
-                    }
+                    block.BlockBehaviors = block.BlockBehaviors.Append(behaviour);
+                    //Debug.WriteLine("Found " + block.Code);
+                    /*if (api.World.Config.TryGetBool("logInOffhandChopping") == true && block.StorageFlags < EnumItemStorageFlags.Offhand)
+                    {
+                        block.StorageFlags = block.StorageFlags + (int)EnumItemStorageFlags.Offhand;
+                    }*/
                 }
             }
         }
