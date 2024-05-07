@@ -1,4 +1,5 @@
 {
 	"heldhelp-chop": "Колоти дрова",
-	"blockinteract-chop": "Колоти"
-}
+	"blockinteract-chop": "Колоти",
+	"ingameerror-notchoppable-claimedland" : "Я не можу це рубати. Мені не надали такого привілею.",
+}   "ingameerror-notchoppable-reinforced" : "Неможливо розколоти. Цей блок укріплений."

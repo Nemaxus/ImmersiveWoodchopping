@@ -45,7 +45,7 @@ namespace ImmersiveWoodchopping
             {
                 return new WorldInteraction[] { new WorldInteraction()
                 {
-                    ActionLangCode = "immersivewoodchopping:blockinteract-chop",
+                    ActionLangCode = Constants.ModId + ":" + "blockinteract-chop",
                     Itemstacks = axeItems.ToArray(),
                     MouseButton = EnumMouseButton.Right
                 } };

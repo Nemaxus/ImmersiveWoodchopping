@@ -89,25 +89,32 @@ namespace ImmersiveWoodchopping
                     {
                         foreach (var variant in ingredient.AllowedVariants)
                         {
-                            genVariant = new AssetLocation(icode.Domain, icodefirstpart + "-" + variant.Replace("-ne-ud", "-*-*").Replace("-ud", "-*")).ToString();
+                            genVariant = icode.ToString().Replace("*", variant).Replace("-ne", "-*").Replace("-ud", "-*");
+                            
+                                //new AssetLocation(icode.Domain, icodefirstpart + "-" + variant.Replace("-ne-ud", "-*-*").Replace("-ud", "-*")).ToString();
                             if (!choppingRecipes.ContainsKey(genVariant))
                             {
                                 choppingRecipes.Add(genVariant, grecipe.Output);
+                            }
+                            else
+                            {
+                                choppingRecipes[genVariant] = grecipe.Output;
                             }
                         }
                     }
                     else
                     {
-                        genVariant = icode.ToString().Replace("-ne-ud", "-*-*").Replace("-ud", "-*");
-                        if (!grecipe.Output.Code.Domain.Equals("game") && choppingRecipes.ContainsKey(genVariant))
-                        {
-                            choppingRecipes[genVariant] = grecipe.Output;
-                        }
-                        else
+                        genVariant = icode.ToString().Replace("-ne", "-*").Replace("-ud", "-*");
+                        if (!choppingRecipes.ContainsKey(genVariant))
                         {
                             choppingRecipes.Add(genVariant, grecipe.Output);
                         }
+                        else
+                        {
+                            choppingRecipes[genVariant] = grecipe.Output;
+                        }
                     }
+
                     if (!choppingMaterials.Contains(icodefirstpart))
                     {
                         choppingMaterials.Add(icodefirstpart);
@@ -116,6 +123,10 @@ namespace ImmersiveWoodchopping
                     grecipe.ShowInCreatedBy = enabled;
                 }
 
+            }
+            foreach (string key in choppingRecipes.Keys)
+            {
+                Debug.WriteLine(key + " " + choppingRecipes[key].Code);
             }
         }
 

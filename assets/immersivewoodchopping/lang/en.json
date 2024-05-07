@@ -1,4 +1,6 @@
 {
 	"heldhelp-chop": "Chop logs to firewood",
-	"blockinteract-chop": "Chop"
+	"blockinteract-chop": "Chop",
+	"ingameerror-notchoppable-claimedland" : "I can not chop this. I wasn't granted that privilege.",
+	"ingameerror-notchoppable-reinforced" : "Can not chop. This log is reinforced."
 }

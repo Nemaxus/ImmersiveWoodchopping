@@ -1,6 +1,9 @@
 ﻿using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Server;
+using Vintagestory.GameContent;
 
 
 namespace ImmersiveWoodchopping
@@ -15,17 +18,31 @@ namespace ImmersiveWoodchopping
         {
             //base.OnHeldInteractStart(slot, byEntity, blockSel, entitySel, firstEvent, ref handHandling, ref handling);
             IPlayer byPlayer = (byEntity as EntityPlayer).Player;
-            if (blockSel != null)
+            if (blockSel == null) return;
+
+
+            if(!byEntity.Api.World.Claims.TryAccess(byPlayer, blockSel.Position, EnumBlockAccessFlags.BuildOrBreak))
             {
-                Block block = byEntity.World.BlockAccessor.GetBlock(blockSel.Position);
-                if (IsChoppable(block))
-                {
-                    byPlayer.Entity.StartAnimation("immersiveaxechopvertical");
-                    handHandling = EnumHandHandling.PreventDefault;
-                    byEntity.WatchedAttributes.SetBool(Constants.ModId + ":madeaswing", false);
-                    byEntity.WatchedAttributes.SetBool(Constants.ModId + ":haschoppedblock", false);
-                }
+                (byEntity.Api as ICoreClientAPI)?.TriggerIngameError(this, "notchoppable-claimedland", Lang.Get(Constants.ModId + ":" + "ingameerror-notchoppable-claimedland"));
+                return;
             }
+
+            ModSystemBlockReinforcement msbr = byEntity.Api.ModLoader.GetModSystem<ModSystemBlockReinforcement>();
+            if (msbr.IsReinforced(blockSel.Position))
+            {
+                (byEntity.Api as ICoreClientAPI)?.TriggerIngameError(this, "notchoppable-reinforced", Lang.Get(Constants.ModId+ ":" + "ingameerror-notchoppable-reinforced"));
+                return; 
+            }
+
+            Block block = byEntity.World.BlockAccessor.GetBlock(blockSel.Position);
+            if (!IsChoppable(block)) return;
+
+            byPlayer.Entity.StartAnimation("immersiveaxechopvertical");
+            handHandling = EnumHandHandling.PreventDefault;
+            byEntity.WatchedAttributes.SetBool(Constants.ModId + ":madeaswing", false);
+            byEntity.WatchedAttributes.SetBool(Constants.ModId + ":haschoppedblock", false);
+
+
         }
 
         public override bool OnHeldInteractStep(float secondsUsed, ItemSlot slot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel, ref EnumHandling handling)

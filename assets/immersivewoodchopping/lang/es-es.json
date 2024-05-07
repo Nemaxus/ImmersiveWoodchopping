@@ -1,4 +1,5 @@
 {
 	"heldhelp-chop": "Cortar troncos",
-	"blockinteract-chop": "Cortar"
-}
+	"blockinteract-chop": "Cortar",
+	"ingameerror-notchoppable-claimedland" : "No puedo cortarlo. No me concedieron ese privilegio.",
+}   "ingameerror-notchoppable-reinforced" : "Impossible cortar. Este bloque está reforzado."
