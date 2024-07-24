@@ -1,10 +1,13 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using ProtoBuf;
+using System.Security.Cryptography.X509Certificates;
 using Vintagestory.API.Common;
 
 namespace ImmersiveWoodchopping
 {
+    [ProtoContract]
     public class ModConfig
     {
+        [ProtoMember(1)]
         ImmersiveWoodchoppingConfig config;
         public void ReadOrGenerateConfig(ICoreAPI api)
         {
@@ -40,7 +43,11 @@ namespace ImmersiveWoodchopping
                 api.StoreModConfig(config, "ImmersiveWoodchoppingConfig.json");
             }*/
 
+            SetWorldConfig(api);
+        }
 
+        public void SetWorldConfig(ICoreAPI api)
+        {
             api.World.Config.SetBool(Constants.ModId + ":AutoLogPlacement", config.AutoLogPlacement);
             api.World.Config.SetBool(Constants.ModId + ":DamageToolOnChop", config.DamageToolOnChop);
             api.World.Config.SetInt(Constants.ModId + ":IntsaChopMinTier", config.IntsaChopMinTier);

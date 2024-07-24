@@ -60,7 +60,6 @@ namespace ImmersiveWoodchopping
             hideInteractionHelpInSurvival = properties["hideInteractionHelpInSurvival"].AsBool(false);
             drop = new AssetLocation(properties["drop"].ToString());
             dropAmount = properties["dropAmount"].AsInt(4);
-
         }
 
         

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Channels;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 
 namespace ImmersiveWoodchopping
@@ -15,15 +18,44 @@ namespace ImmersiveWoodchopping
         public readonly Dictionary<string, CraftingRecipeIngredient> choppingRecipes = new();
         public readonly List<string> choppingMaterials = new();
 
+        private IServerNetworkChannel schannel;
+        private IClientNetworkChannel cchannel;
+        private ICoreAPI _api = null;
         public override void StartPre(ICoreAPI api)
         {
             base.StartPre(api);
             config.ReadOrGenerateConfig(api);
+
+            if (api is ICoreServerAPI sApi)
+            {
+                schannel = sApi.Network.RegisterChannel(Constants.ModId + "-syncconfig")
+                    .RegisterMessageType<ModConfig>();
+            }
+            if (api is ICoreClientAPI cApi)
+            {
+                cchannel = cApi.Network.RegisterChannel(Constants.ModId + "-syncconfig")
+                    .RegisterMessageType<ModConfig>()
+                    .SetMessageHandler<ModConfig>(OnSyncConfigReceived);
+            }
+        }
+
+        private void OnSyncConfigReceived(ModConfig modConfig)
+        {
+            config = modConfig;
+            config.SetWorldConfig(_api as ICoreClientAPI);
         }
         public override void Start(ICoreAPI api)
         {
             api.RegisterCollectibleBehaviorClass("WoodChopping", typeof(WoodChopping));
             api.RegisterBlockBehaviorClass("AxeChoppable", typeof(BlockBehaviorAxeChoppable));
+        }
+
+        public override void StartServerSide(ICoreServerAPI api)
+        {
+            api.Event.PlayerJoin += byPlayer =>
+            {
+                schannel.SendPacket(config, byPlayer);
+            };
         }
 
         public override double ExecuteOrder()
@@ -124,10 +156,10 @@ namespace ImmersiveWoodchopping
                 }
 
             }
-            foreach (string key in choppingRecipes.Keys)
+            /*foreach (string key in choppingRecipes.Keys)
             {
                 Debug.WriteLine(key + " " + choppingRecipes[key].Code);
-            }
+            }*/
         }
 
         public Dictionary<string, CraftingRecipeIngredient> GetFirewoodRecipesList()

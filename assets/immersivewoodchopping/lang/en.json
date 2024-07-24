@@ -1,6 +1,7 @@
 {
 	"heldhelp-chop": "Chop logs to firewood",
 	"blockinteract-chop": "Chop",
+	"handbook-chopping-craftinfo" : "Placing a log on ground and holding <hk>rightmouse</hk>-button while having an axe in main hand.",
 	"ingameerror-notchoppable-claimedland" : "I can not chop this. I wasn't granted that privilege.",
 	"ingameerror-notchoppable-reinforced" : "Can not chop. This log is reinforced."
 }
