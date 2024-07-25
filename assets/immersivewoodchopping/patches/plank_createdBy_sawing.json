@@ -1,8 +1,0 @@
-[
-{
-	"file" : "game:itemtypes/resource/firewood.json",
-	"op" : "add",
-	"path" : "/attributes/handbook",
-	"value" : {"createdBy": "immersivewoodchopping:handbook-chopping-craftinfo"}
-}
-]

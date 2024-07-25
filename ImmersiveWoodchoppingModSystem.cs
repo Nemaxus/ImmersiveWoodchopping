@@ -24,6 +24,7 @@ namespace ImmersiveWoodchopping
         public override void StartPre(ICoreAPI api)
         {
             base.StartPre(api);
+            _api = api;
             config.ReadOrGenerateConfig(api);
 
             if (api is ICoreServerAPI sApi)
@@ -66,6 +67,7 @@ namespace ImmersiveWoodchopping
         public override void AssetsFinalize(ICoreAPI api)
         {
             GenerateFirewoodRecipeList(api);
+            AssignHandbookAttributes(api);
             AssingDrops(api);
 
             if (api.Side == EnumAppSide.Server)
@@ -162,11 +164,6 @@ namespace ImmersiveWoodchopping
             }*/
         }
 
-        public Dictionary<string, CraftingRecipeIngredient> GetFirewoodRecipesList()
-        {
-            return choppingRecipes;
-        }
-
         public void AssingDrops(ICoreAPI api)
         {
             foreach (var block in api.World.Blocks)
@@ -202,6 +199,38 @@ namespace ImmersiveWoodchopping
                         block.StorageFlags = block.StorageFlags + (int)EnumItemStorageFlags.Offhand;
                     }*/
                 }
+            }
+        }
+
+        //Thank you Tyron for providing me with an example for patching JsonObject and JToken nightmare in Attributes 0_o
+        public void AssignHandbookAttributes(ICoreAPI api)
+        {
+            /*
+            List<AssetLocation> firewoodOutputs = new();
+            foreach(var firewoodOutput in choppingRecipes.Values)
+            {
+                if (!firewoodOutputs.Contains(firewoodOutput.Code))
+                {
+                    firewoodOutputs.Add(firewoodOutput.Code);
+                }
+            }
+            */
+            foreach(var firewoodType in choppingRecipes.Values)
+            {
+                Item firewood = api.World.GetItem(firewoodType.Code);
+                JToken token;
+                if (firewood.Attributes?["handbook"].Exists != true)
+                {
+                    if (firewood.Attributes == null) firewood.Attributes = new JsonObject(JToken.Parse("{ handbook: {} }"));
+                    else
+                    {
+                        token = firewood.Attributes.Token;
+                        token["handbook"] = JToken.Parse("{ }");
+                    }
+                }
+
+                token = firewood.Attributes["handbook"].Token;
+                token["createdBy"] = JToken.FromObject(Constants.ModId + ":handbook-chopping-craftinfo");
             }
         }
     }
