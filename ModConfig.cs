@@ -8,7 +8,7 @@ namespace ImmersiveWoodchopping
     public class ModConfig
     {
         [ProtoMember(1)]
-        ImmersiveWoodchoppingConfig config;
+        public ImmersiveWoodchoppingConfig config;
         public void ReadOrGenerateConfig(ICoreAPI api)
         {
             try
@@ -52,6 +52,13 @@ namespace ImmersiveWoodchopping
             api.World.Config.SetBool(Constants.ModId + ":DamageToolOnChop", config.DamageToolOnChop);
             api.World.Config.SetInt(Constants.ModId + ":IntsaChopMinTier", config.IntsaChopMinTier);
             api.World.Config.SetBool(Constants.ModId + ":DisableGridRecipe", config.DisableGridRecipe);
+        }
+
+        public ModConfig Clone()
+        {
+            ModConfig cfg = new ModConfig();
+            cfg.config = new ImmersiveWoodchoppingConfig(config);
+            return cfg;
         }
     }
 }

@@ -1,14 +1,15 @@
 ﻿using ProtoBuf;
+using System.ComponentModel;
 
 namespace ImmersiveWoodchopping
 {
-    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+    [ProtoContract]
     public class ImmersiveWoodchoppingConfig
     {
-        public bool AutoLogPlacement = false;
-        public bool DamageToolOnChop = false;
-        public int IntsaChopMinTier = 1;
-        public bool DisableGridRecipe = true;
+        [ProtoMember(1), DefaultValue(false)] public bool AutoLogPlacement = false;
+        [ProtoMember(2), DefaultValue(false)] public bool DamageToolOnChop = false;
+        [ProtoMember(3)] public int IntsaChopMinTier = 1;
+        [ProtoMember(4), DefaultValue(true)] public bool DisableGridRecipe = true;
         public ImmersiveWoodchoppingConfig()
         {
 

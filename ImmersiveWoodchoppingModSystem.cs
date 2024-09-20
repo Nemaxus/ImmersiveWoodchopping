@@ -30,19 +30,19 @@ namespace ImmersiveWoodchopping
             if (api is ICoreServerAPI sApi)
             {
                 schannel = sApi.Network.RegisterChannel(Constants.ModId + "-syncconfig")
-                    .RegisterMessageType<ModConfig>();
+                    .RegisterMessageType<ImmersiveWoodchoppingConfig>();
             }
             if (api is ICoreClientAPI cApi)
             {
                 cchannel = cApi.Network.RegisterChannel(Constants.ModId + "-syncconfig")
-                    .RegisterMessageType<ModConfig>()
-                    .SetMessageHandler<ModConfig>(OnSyncConfigReceived);
+                    .RegisterMessageType<ImmersiveWoodchoppingConfig>()
+                    .SetMessageHandler<ImmersiveWoodchoppingConfig>(OnSyncConfigReceived);
             }
         }
 
-        private void OnSyncConfigReceived(ModConfig modConfig)
+        private void OnSyncConfigReceived(ImmersiveWoodchoppingConfig modConfig)
         {
-            config = modConfig;
+            config.config = modConfig;
             config.SetWorldConfig(_api as ICoreClientAPI);
         }
         public override void Start(ICoreAPI api)
@@ -55,7 +55,7 @@ namespace ImmersiveWoodchopping
         {
             api.Event.PlayerJoin += byPlayer =>
             {
-                schannel.SendPacket(config, byPlayer);
+                schannel.SendPacket(config.Clone().config, byPlayer);
             };
         }
 
