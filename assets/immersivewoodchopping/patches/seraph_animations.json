@@ -46,8 +46,6 @@
 						"LowerTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"UpperFootL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"UpperFootR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
-						"FrontShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
-						"BackShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"UpperTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"ItemAnchor": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 }
 					}
@@ -59,8 +57,6 @@
 						"UpperArmR": { "rotationX": -10.0, "rotationY": 10.0, "rotationZ": -75.0 },
 						"LowerArmR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"LowerArmL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
-						"BackShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
-						"FrontShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"UpperFootR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"UpperFootL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"LowerTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
@@ -95,9 +91,6 @@
 						"LowerTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"UpperFootL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"UpperFootR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
-						"FrontShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
-						"BackShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
-						"LowerButtons": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"ItemAnchor": { "offsetX": -8.0, "offsetY": 0.0, "offsetZ": 0.0, "rotationX": 26.0, "rotationY": 0.0, "rotationZ": 0.0 }
 					}
 				},
@@ -112,9 +105,6 @@
 						"LowerTorso": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 20.0 },
 						"UpperFootL": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -20.0 },
 						"UpperFootR": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -20.0 },
-						"FrontShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -20.0 },
-						"BackShirtTile": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": -10.0 },
-						"LowerButtons": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 },
 						"ItemAnchor": { "offsetX": -8.0, "offsetY": 0.0, "offsetZ": 0.0, "rotationX": 28.0, "rotationY": 5.0, "rotationZ": 0.0 }
 					}
 				}

@@ -1,4 +1,5 @@
-﻿using Vintagestory.API.Client;
+﻿using System;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
@@ -68,7 +69,8 @@ namespace ImmersiveWoodchopping
                         {
                             var pitch = (byEntity as EntityPlayer).talkUtil.pitchModifier;
 
-                            world.PlaySoundAt(new AssetLocation("sounds/block/chop"), byPlayer.Entity, byPlayer, pitch * 0.9f + (float)world.Rand.NextDouble() * 0.2f, 16, 1f);
+
+                            world.PlaySoundAt(new AssetLocation(Constants.ModId, "sounds/block/chop" + (int)(world.Rand.NextDouble()*3 + 1)), byPlayer.Entity, byPlayer, pitch * 0.9f + (float)world.Rand.NextDouble() * 0.2f, 16, 1f);
 
                             (world as IClientWorldAccessor)?.AddCameraShake(0.25f);
                             byEntity.WatchedAttributes.SetBool(Constants.ModId + ":madeaswing", true);
