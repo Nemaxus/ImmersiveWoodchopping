@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -51,11 +52,12 @@ namespace ImmersiveWoodchopping
             IPlayer byPlayer = (byEntity as EntityPlayer).Player;
             IWorldAccessor world = byEntity.World;
             IBlockAccessor blockAccessor = world.BlockAccessor;
+            BlockPos position = blockSel.Position;
 
 
             if (blockSel != null)
             {
-                Block block = blockAccessor.GetBlock(blockSel.Position);
+                Block block = blockAccessor.GetBlock(position);
                 if (IsChoppable(block))
                 {
                     handling = EnumHandling.PreventDefault;
@@ -70,7 +72,7 @@ namespace ImmersiveWoodchopping
                             var pitch = (byEntity as EntityPlayer).talkUtil.pitchModifier;
 
 
-                            world.PlaySoundAt(new AssetLocation(Constants.ModId, "sounds/block/chop" + (int)(world.Rand.NextDouble()*3 + 1)), byPlayer.Entity, byPlayer, pitch * 0.9f + (float)world.Rand.NextDouble() * 0.2f, 16, 1f);
+                            //world.PlaySoundAt(new AssetLocation(Constants.ModId, "sounds/block/split" + (int)(world.Rand.NextDouble()*3 + 1)), byPlayer.Entity, byPlayer, pitch * 0.9f + (float)world.Rand.NextDouble() * 0.2f, 16, 1f);
 
                             (world as IClientWorldAccessor)?.AddCameraShake(0.25f);
                             byEntity.WatchedAttributes.SetBool(Constants.ModId + ":madeaswing", true);
@@ -83,6 +85,8 @@ namespace ImmersiveWoodchopping
 
                     if (world.Side == EnumAppSide.Server)
                     {
+                        var pitch = (byEntity as EntityPlayer).talkUtil.pitchModifier;
+
                         if (secondsUsed > 0.45f && !byEntity.WatchedAttributes.GetBool(Constants.ModId + ":haschoppedblock"))
                         {
                             int minToolTier = world.Config.GetInt(Constants.ModId + ":IntsaChopMinTier");
@@ -91,24 +95,30 @@ namespace ImmersiveWoodchopping
                             float chopChance = item.ToolTier / (float)(minToolTier == 0 ? 1 : minToolTier);
                             if (world.Rand.NextDouble() > chopChance)
                             {
+
                                 if (world.Config.TryGetBool(Constants.ModId + ":DamageToolOnChop") == true)
                                 {
                                     item.DamageItem(world, byEntity, byEntity.RightHandItemSlot);
                                     //blockAccessor.DamageBlock(blockSel.Position, BlockFacing.FromNormal(byEntity.Pos.GetViewVector()), block.Resistance * chopChance);
                                 }
-                                blockAccessor.DamageBlock(blockSel.Position, BlockFacing.FromNormal(byEntity.Pos.GetViewVector()), block.Resistance * chopChance);
+
+                                world.PlaySoundAt(new AssetLocation(Constants.ModId, "sounds/block/chop" + (world.Rand.Next(3)+1)), byPlayer.Entity, null, pitch * 0.9f + (float)world.Rand.NextDouble() * 0.2f, 16, 1f);
+                                blockAccessor.DamageBlock(position, BlockFacing.FromNormal(byEntity.Pos.GetViewVector()), block.Resistance * chopChance);
                             }
                             else
                             {
                                 BlockBehaviorAxeChoppable blockBehavior = block.GetBehavior(typeof(BlockBehaviorAxeChoppable), true) as BlockBehaviorAxeChoppable;
 
-                                blockAccessor.BreakBlock(blockSel.Position, byPlayer, 0);
-                                blockAccessor.MarkBlockDirty(blockSel.Position, byPlayer);
+                                //world.PlaySoundAt(new AssetLocation(Constants.ModId, "sounds/block/chop" + (world.Rand.Next(3) + 1)), byPlayer.Entity, null, pitch * 0.9f + (float)world.Rand.NextDouble() * 0.2f, 16, 1f);
+                                world.PlaySoundAt(new AssetLocation(Constants.ModId, "sounds/block/split" + (world.Rand.Next(3)+1)), byPlayer.Entity, null, pitch * 0.9f + (float)world.Rand.NextDouble() * 0.2f, 16, 1f);
+
+                                blockAccessor.BreakBlock(position, byPlayer, 0);
+                                blockAccessor.MarkBlockDirty(position, byPlayer);
                                 Item drops = world.GetItem(blockBehavior.drop);
 
                                 for (int i = 0; i < blockBehavior.dropAmount; i++)
                                 {
-                                    world.SpawnItemEntity(new ItemStack(drops, 1), blockSel.Position.ToVec3d());
+                                    world.SpawnItemEntity(new ItemStack(drops, 1), position.ToVec3d().Add(new Vec3d(0.5 + (world.Rand.NextDouble() < 0.5 ? 0.4 : -0.4), 0.4, 0.5 + (world.Rand.NextDouble() < 0.5 ? 0.4 : -0.4))));
                                 }
                                 item.DamageItem(world, byEntity, byEntity.RightHandItemSlot);
 

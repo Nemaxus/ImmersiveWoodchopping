@@ -1,0 +1,7 @@
+{
+	"heldhelp-chop": "Couper les bûches en bois de chauffage",
+	"blockinteract-chop": "Couper",
+	"handbook-chopping-craftinfo" : "Placer une bûche sur le sol et maintenir <hk>clic droit</hk>-bouton en ayant une hache dans les mains.",
+	"ingameerror-notchoppable-claimedland" : "Je ne peux pas couper ça. Je n'en ai pas le privilège.",
+	"ingameerror-notchoppable-reinforced" : "Ne peux pas être coupée. Cette bûche est renforcée."
+}
