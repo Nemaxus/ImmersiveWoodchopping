@@ -1,0 +1,46 @@
+{
+	code: "logsplitter",
+	creativeinventory: { "general": ["*"], "mechanics": ["*"] },
+	shape: {base: "immersivewoodchopping:logsplitter"},
+	heldTpIdleAnimation: "holdbothhandslarge", heldRightReadyAnimation: "heldblockready", heldTpUseAnimation: "twohandplaceblock", 
+	blockmaterial: "Wood",
+	sidesolid: {
+		all: false
+	},
+	sideopaque: {
+		all: false
+	},
+	rainPermeable: true,
+	resistance: 3.5,
+	lightAbsorption: 0,
+	maxStackSize: 1,
+	drops: [
+		{ type: "block", code: "logsplitter", quantity: { avg: 1 }  }
+	],
+	groundTransform: {
+		translation: { x: 0, y: 0, z: 0 },
+		rotation: { x: -90, y: 0, z: 0 },
+		origin: { x: 0.5, y: 0.45, z: 0.38 },
+		scale: 2.7
+	},
+	guiTransform: {
+		translation: { x: 0, y: 8, z: 0 },
+		rotation: { x: -43, y: 45, z: 1 },
+		scale: 0.76
+	},
+	tpHandTransform: {
+		translation: { x: -1.2, y: -0.5, z: -0.7 },
+		rotation: { x: 8, y: 11, z: -83 },
+		origin: { x: 0.5, y: 0.25, z: 0.5 },
+		scale: 0.42
+	},
+	collisionSelectionBox: {
+		x1: 0, y1: 0, z1: 0, x2: 1, y2: 1, z2: 1
+	},
+	sounds: {
+		"hit": "game:block/planks",
+		"break": "game:block/planks",
+		"place": "game:block/planks",
+		"walk": "game:walk/wood"
+	}
+}

@@ -52,11 +52,11 @@ namespace ImmersiveWoodchopping
             IPlayer byPlayer = (byEntity as EntityPlayer).Player;
             IWorldAccessor world = byEntity.World;
             IBlockAccessor blockAccessor = world.BlockAccessor;
-            BlockPos position = blockSel.Position;
 
 
             if (blockSel != null)
             {
+                BlockPos position = blockSel.Position;
                 Block block = blockAccessor.GetBlock(position);
                 if (IsChoppable(block))
                 {
