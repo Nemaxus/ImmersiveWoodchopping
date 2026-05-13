@@ -6,8 +6,8 @@
         "NemaxuswarZet"
     ],
     "description": "This mod adds an immersive way of getting firewood by chopping logs in world",
-    "version": "0.8.1",
+    "version": "0.8.3",
     "dependencies": {
-        "game": "1.20.0"
+        "game": "1.22.0"
     }
 }

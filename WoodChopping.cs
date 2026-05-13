@@ -53,7 +53,6 @@ namespace ImmersiveWoodchopping
             IWorldAccessor world = byEntity.World;
             IBlockAccessor blockAccessor = world.BlockAccessor;
 
-
             if (blockSel != null)
             {
                 BlockPos position = blockSel.Position;
@@ -86,7 +85,6 @@ namespace ImmersiveWoodchopping
                     if (world.Side == EnumAppSide.Server)
                     {
                         var pitch = (byEntity as EntityPlayer).talkUtil.pitchModifier;
-
                         if (secondsUsed > 0.45f && !byEntity.WatchedAttributes.GetBool(Constants.ModId + ":haschoppedblock"))
                         {
                             int minToolTier = world.Config.GetInt(Constants.ModId + ":IntsaChopMinTier");
